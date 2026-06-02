@@ -2,16 +2,15 @@ name: News Room Engine Cron
 
 on:
   schedule:
-    # Run at 15 and 45 minutes past every hour (Offsetting avoids high-load delay congestion)
     - cron: '15,45 * * * *'
-  workflow_dispatch: # Allows you to manually trigger the script with a button on GitHub
+  workflow_dispatch: # Allows you to manually trigger the script with a button
 
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
     steps:
       - name: Codebase Pull
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Keeps tracking clean
 
       - name: Initialize Runtime Environment
         uses: actions/setup-python@v5
@@ -27,4 +26,6 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          # Forces the runner to use the updated secure JavaScript runtime engine
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true" 
         run: python app.py
