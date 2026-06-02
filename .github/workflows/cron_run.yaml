@@ -1,8 +1,8 @@
 name: News Room Engine Cron
 
 on:
-  schedule:
-    - cron: '15,45 * * * *'
+  #schedule:
+  #  - cron: '15,45 * * * *'
   workflow_dispatch: # Allows you to manually trigger the script with a button
 
 jobs:
