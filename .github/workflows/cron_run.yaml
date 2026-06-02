@@ -1,0 +1,30 @@
+name: News Room Engine Cron
+
+on:
+  schedule:
+    # Run at 15 and 45 minutes past every hour (Offsetting avoids high-load delay congestion)
+    - cron: '15,45 * * * *'
+  workflow_dispatch: # Allows you to manually trigger the script with a button on GitHub
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Codebase Pull
+        uses: actions/checkout@v4
+
+      - name: Initialize Runtime Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Load Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Execute News Engine
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: python app.py
